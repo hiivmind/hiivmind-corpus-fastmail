@@ -1,0 +1,76 @@
+# Fastmail Corpus Configuration
+schema_version: 2
+
+corpus:
+  name: "fastmail"
+  display_name: "Fastmail"
+  keywords:                    # Routing keywords for per-session discovery
+    - "fastmail"
+    - "jmap"
+    - "email"
+    - "api"
+    - "mail server"
+    - "email automation"
+    - "json meta application protocol"
+  created_at: null
+
+# Multiple sources - each with its own type and tracking
+sources:
+  - id: "fastmail-dev"
+    type: "web"
+    description: "Fastmail API documentation and developer resources"
+    urls:
+      - url: "https://www.fastmail.com/dev/"
+        title: "Fastmail API Documentation"
+        cached_file: "index.md"
+        fetched_at: "2025-12-23T00:00:00Z"
+        content_hash: "sha256:a4b2c76fc37ce05f7e6db41f0dbe38f78bf413807b2bd4e83d966cfc827f992b"
+      - url: "https://jmap.io/crash-course.html"
+        title: "JMAP Crash Course"
+        cached_file: "crash-course.md"
+        fetched_at: "2025-12-23T00:00:00Z"
+        content_hash: "sha256:be52d7eb46153cbd55fa5078ad26e59e55f760c169b706d5c693891474cfc2ac"
+    cache_dir: ".cache/web/fastmail-dev/"
+    last_indexed_at: null
+  - id: "jmap-spec"
+    type: "web"
+    description: "JMAP protocol specifications and implementation guides"
+    urls:
+      - url: "https://jmap.io/spec.html"
+        title: "JMAP Specifications Overview"
+        cached_file: "spec.md"
+        fetched_at: "2025-12-23T00:00:00Z"
+        content_hash: "sha256:6e0ff10aa7a804bdab194a6fa9f1d00dd15aef0c9c222c71a8450aba5c2c7394"
+      - url: "https://jmap.io/client.html"
+        title: "JMAP Client Developer Guide"
+        cached_file: "client.md"
+        fetched_at: "2025-12-23T00:00:00Z"
+        content_hash: "sha256:ad25835f1d5aef55e34732cb97709ee8c840e629cfc1520be6b15c9025ec200a"
+      - url: "https://jmap.io/server.html"
+        title: "JMAP Server Implementation Guide"
+        cached_file: "server.md"
+        fetched_at: "2025-12-23T00:00:00Z"
+        content_hash: "sha256:ce4150ff43e7a7b617f623ecb310b183df5008c8786b437d7eef8034f6c63a3f"
+    cache_dir: ".cache/web/jmap-spec/"
+    last_indexed_at: null
+  - id: "jmap-samples"
+    type: "git"
+    repo_url: "https://github.com/fastmail/JMAP-Samples"
+    repo_owner: "fastmail"
+    repo_name: "JMAP-Samples"
+    branch: "main"
+    docs_root: "."
+    last_commit_sha: "39b02c26a2189c083f0c00d22b9a5d7a0594f083"
+    last_indexed_at: null
+
+index:
+  format: "markdown"
+  last_updated_at: null
+
+settings:
+  include_patterns:
+    - "**/*.md"
+    - "**/*.mdx"
+  exclude_patterns:
+    - "**/_*.md"
+    - "**/_snippets/**"

@@ -1,0 +1,14 @@
+# Cloned documentation repositories
+.source/
+
+# Cached web content
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
