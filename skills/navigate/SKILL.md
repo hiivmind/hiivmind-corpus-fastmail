@@ -121,9 +121,9 @@ data/
 Index entries use the format: `{source_id}:{relative_path}`
 
 Examples:
-- `fastmail-api:reference/api.md` - Web source
-- `jmap-spec:spec/core.md` - Web source
-- `local:team-standards/guidelines.md` - Local uploads
+- `fastmail-dev:index.md` - Fastmail API documentation
+- `fastmail-dev:crash-course.md` - JMAP crash course
+- `fastmail-dev:spec-core.md` - JMAP core specification
 
 ---
 
@@ -131,26 +131,25 @@ Examples:
 
 ### Worked Example (IMPORTANT - Follow This Pattern!)
 
-**Index entry found:** `docs:guides/getting-started/index.md`
+**Index entry found:** `fastmail-dev:crash-course.md`
 
 **Step 1 - Parse the path:**
-- `source_id` = `docs` (everything before the colon)
-- `relative_path` = `guides/getting-started/index.md` (everything after the colon)
+- `source_id` = `fastmail-dev` (everything before the colon)
+- `relative_path` = `crash-course.md` (everything after the colon)
 
 **Step 2 - Look up source in config.yaml:**
 ```yaml
 sources:
-  - id: docs
-    type: git
-    repo_owner: example
-    repo_name: docs
-    branch: main
-    docs_root: content
+  - id: fastmail-dev
+    type: web
+    description: "Fastmail API documentation and developer resources"
+    urls:
+      - url: "https://jmap.io/crash-course.html"
+        cached_file: "crash-course.md"
 ```
 
-**Step 3 - Construct the full path:**
-- Local clone: `.source/docs/content/guides/getting-started/index.md`
-- GitHub URL: `https://raw.githubusercontent.com/example/docs/main/content/guides/getting-started/index.md`
+**Step 3 - Read from cache:**
+- Cache path: `.cache/web/fastmail-dev/crash-course.md`
 
 **CRITICAL:** The `relative_path` from the index is used EXACTLY as-is. NEVER invent or guess filenames!
 
