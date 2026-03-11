@@ -1,7 +1,7 @@
 # Fastmail & JMAP Documentation Corpus
 
 > **Sources:** Fastmail API docs, JMAP specifications, code examples
-> **Last updated:** 2025-12-23
+> **Last updated:** 2026-03-11
 > **Total:** 5 documentation files + code samples across 4 languages
 
 ---
@@ -40,8 +40,8 @@
 - **Result References** `fastmail-dev:crash-course.md` (lines 51-78) - Chaining dependent operations with `#` prefix, resultOf, name, and path for efficient single-request workflows
   - Keywords: `result references`, `chaining`, `batch operations`
 
-- **JMAP Specifications Overview** `jmap-spec:spec.md` - Landing page referencing finalized RFCs (core protocol, JMAP Mail, WebSocket, Blob Management, Quotas) and in-development specs
-  - Keywords: `rfc`, `specifications`, `standards`
+- **JMAP Specifications Overview** `jmap-spec:spec.md` - Landing page referencing finalized RFCs (core protocol, JMAP Mail, WebSocket, Blob Management, Quotas, Sieve, MDN, S/MIME) and in-development specs (Calendars, Sharing, Tasks)
+  - Keywords: `rfc`, `specifications`, `standards`, `sieve`, `s/mime`
 
 ---
 
