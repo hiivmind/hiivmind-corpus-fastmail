@@ -1,47 +1,47 @@
 # Fastmail & JMAP Documentation Corpus
 
 > **Sources:** Fastmail API docs, JMAP specifications, code examples
-> **Last updated:** 2026-03-11
+> **Last updated:** 2026-07-01
 > **Total:** 5 documentation files + code samples across 4 languages
 
 ---
 
 ## Getting Started
 
-- **Fastmail API Overview** `fastmail-dev:index.md` - Supported protocols (JMAP, IMAP, POP, SMTP, CardDAV, CalDAV, WebDAV), authentication methods, and API endpoints
+- **Fastmail API Overview** `fastmail-dev:index.md` - Supported protocols: mail via JMAP (RFC8621), IMAP (RFC9051), or POP (RFC1939), send via JMAP or SMTP (RFC5321); contacts via JMAP (RFC9610) or CardDAV (RFC6352); calendars via CalDAV (RFC4791, JMAP calendar access pending finalized spec); files via WebDAV (RFC4918). Covers authentication requirements and API token / app password generation via Settings → Privacy & Security
   - Keywords: `protocols`, `overview`, `getting started`
 
-- **JMAP Crash Course** `fastmail-dev:crash-course.md` - Foundational tutorial covering request/response model, authentication, server discovery, and result references with Perl code examples
+- **JMAP Crash Course** `fastmail-dev:crash-course.md` - Foundational tutorial (now at `jmap.io/crash-course/`) covering request/response model, authentication & autodiscovery via `_jmap._tcp` SRV records, the JMAP session resource, result references, and a worked example with Perl code
   - Keywords: `tutorial`, `crash course`, `basics`, `introduction`
 
 ---
 
 ## Authentication & Authorization
 
-- **Authentication Methods** `fastmail-dev:index.md` (lines 18-26) - API tokens for development, OAuth 2.0 for distributed apps
+- **Authentication Methods** `fastmail-dev:index.md` (lines 18-26) - API tokens for development, OAuth 2.0 for distributed apps, generated via Settings → Privacy & Security → Manage API tokens / Manage app passwords and access
   - Keywords: `authentication`, `api tokens`, `app passwords`
 
-- **OAuth 2.0 Implementation** `fastmail-dev:index.md` (lines 39-58) - OAuth registration, scopes, authorization flow, PKCE requirements
+- **OAuth 2.0 Implementation** `fastmail-dev:index.md` (lines 39-58) - OAuth registration, scopes (now includes `urn:ietf:params:jmap:contacts` for RFC9610 contacts access alongside core/mail/submission/vacationresponse/maskedemail), authorization flow, PKCE requirements
   - Keywords: `oauth`, `authorization`, `pkce`, `scopes`
 
-- **Masked Email API** `fastmail-dev:index.md` (lines 35-38) - JMAP extension for managing masked email addresses with metadata fields
+- **Masked Email API** `fastmail-dev:index.md` (lines 35-38) - JMAP extension for managing masked email addresses with metadata fields (`createdBy`, `forDomain`, `url`, `description`, `emailPrefix`)
   - Keywords: `masked email`, `privacy`, `jmap extension`
 
 ---
 
 ## JMAP Core Concepts
 
-- **Request and Response Model** `fastmail-dev:crash-course.md` (lines 7-28) - Structure of JMAP requests (using, methodCalls) and responses (methodResponses, sessionState)
+- **Request and Response Model** `fastmail-dev:crash-course.md` - Structure of JMAP requests (`using`, `methodCalls`) and responses (`methodResponses`, `sessionState`)
   - Keywords: `request`, `response`, `method calls`, `json`
 
-- **Session Object** `fastmail-dev:crash-course.md` (lines 34-42) - Session discovery via `/.well-known/jmap`, capabilities, accounts, primaryAccounts, URL templates
-  - Keywords: `session`, `discovery`, `capabilities`, `accounts`
+- **Session Object & Autodiscovery** `fastmail-dev:crash-course.md` - Session discovery via `_jmap._tcp` DNS SRV lookup and `/.well-known/jmap`, capabilities, accounts, primaryAccounts, URL templates (`apiUrl`, `uploadUrl`, `downloadUrl`, `eventSourceUrl`)
+  - Keywords: `session`, `discovery`, `capabilities`, `accounts`, `autodiscovery`
 
-- **Result References** `fastmail-dev:crash-course.md` (lines 51-78) - Chaining dependent operations with `#` prefix, resultOf, name, and path for efficient single-request workflows
+- **Result References** `fastmail-dev:crash-course.md` - Chaining dependent operations with `#` prefix, `resultOf`, `name`, and `path` for efficient single-request workflows
   - Keywords: `result references`, `chaining`, `batch operations`
 
-- **JMAP Specifications Overview** `jmap-spec:spec.md` - Landing page referencing finalized RFCs (core protocol, JMAP Mail, WebSocket, Blob Management, Quotas, Sieve, MDN, S/MIME) and in-development specs (Calendars, Sharing, Tasks)
-  - Keywords: `rfc`, `specifications`, `standards`, `sieve`, `s/mime`
+- **JMAP Specifications Overview** `jmap-spec:spec.md` - Landing page for finalized and in-progress RFCs, now reorganized under `jmap.io/spec/`. **Core:** RFC8620 (core protocol), RFC9749 (VAPID for JMAP Push), RFC9670 (JMAP Sharing), RFC8887 (JMAP via WebSocket), RFC9425 (JMAP Quotas), RFC9404 (JMAP Blob Management). **Mail:** RFC8621 (JMAP Mail), RFC9661 (Sieve Scripts Management), RFC9007 (MDN Handling), RFC9219 (S/MIME Signature Verification). **Contacts & Calendars:** RFC9610 (JMAP Contacts, finalized), JMAP Calendars (in progress). **Data formats:** RFC9553 (JSContact), JSCalendar 2.0 (in progress). Note: the previously-tracked "Tasks" spec is no longer listed as a separate in-development item
+  - Keywords: `rfc`, `specifications`, `standards`, `sieve`, `s/mime`, `sharing`, `websocket`, `quotas`, `blob management`, `jscontact`
 
 ---
 
@@ -49,127 +49,126 @@
 
 ### Initial Setup
 
-- **Cold Boot Initialization** `jmap-spec:client.md` (lines 11-39) - First login flow: fetch mailbox list with `Mailbox/get`, understand role attributes, permission flags, counts
+- **Cold Boot Initialization** `jmap-spec:client.md` - First login flow: fetch mailbox list with `Mailbox/get`, understand role attributes, permission flags, counts
   - Keywords: `cold boot`, `initialization`, `mailbox list`, `first login`
 
-- **Initial Data Loading** `jmap-spec:client.md` (lines 43-74) - Chained request pattern for loading message view: `Email/query` → `Email/get` (threadId) → `Thread/get` → `Email/get` (full details)
+- **Initial Data Loading** `jmap-spec:client.md` - Chained request pattern for loading message view: `Email/query` → `Email/get` (threadId) → `Thread/get` → `Email/get` (full details)
   - Keywords: `initial load`, `message view`, `chained requests`
 
 ### Navigation & Display
 
-- **Pagination** `jmap-spec:client.md` (lines 78-94) - Scrolling through messages with position-adjusted `Email/query` calls, optimization strategies
+- **Pagination** `jmap-spec:client.md` - Scrolling through messages with position-adjusted `Email/query` calls, optimization strategies
   - Keywords: `pagination`, `scrolling`, `lazy loading`
 
-- **Opening Thread Details** `jmap-spec:client.md` (lines 98-114) - Fetching complete message details with properties (blobId, messageId, headers, body values)
+- **Opening Thread Details** `jmap-spec:client.md` - Fetching complete message details with properties (blobId, messageId, headers, body values)
   - Keywords: `thread details`, `message content`, `email body`
 
 ### Synchronization
 
-- **Staying in Sync** `jmap-spec:client.md` (lines 120-165) - Comprehensive sync sequence using `Mailbox/changes`, `Email/queryChanges`, `Email/changes`, `Thread/changes`
+- **Staying in Sync** `jmap-spec:client.md` - Comprehensive sync sequence using `Mailbox/changes`, `Email/queryChanges`, `Email/changes`, `Thread/changes`
   - Keywords: `synchronization`, `push notifications`, `state changes`, `delta updates`
 
-- **Processing Sync Responses** `jmap-spec:client.md` (lines 167-189) - Applying mailbox changes, email query changes, handling `updatedProperties`, removing/adding messages
+- **Processing Sync Responses** `jmap-spec:client.md` - Applying mailbox changes, email query changes, handling `updatedProperties`, removing/adding messages
   - Keywords: `sync processing`, `change application`, `state reconciliation`
 
 ### Error Handling
 
-- **tooManyChanges Error** `jmap-spec:client.md` (lines 193-204) - Recovery strategies when changes exceed maxChanges limits
+- **tooManyChanges Error** `jmap-spec:client.md` - Recovery strategies when changes exceed `maxChanges` limits
   - Keywords: `error handling`, `too many changes`, `recovery`
 
-- **Limited Delta Support** `jmap-spec:client.md` (lines 206-213) - Handling servers without `canCalculateChanges` capability
+- **Limited Delta Support** `jmap-spec:client.md` - Handling servers without `canCalculateChanges` capability
   - Keywords: `delta support`, `fallback`, `compatibility`
 
 ### Actions
 
-- **Moving Messages** `jmap-spec:client.md` (lines 219-231) - Updating mailbox membership with `Email/set`
+- **Moving Messages** `jmap-spec:client.md` - Updating mailbox membership with `Email/set`
   - Keywords: `move messages`, `mailbox membership`, `email set`
 
-- **Optimistic Updates** `jmap-spec:client.md` (lines 233-259) - Apply changes immediately: update counts, splice query lists, modify message objects
+- **Optimistic Updates** `jmap-spec:client.md` - Apply changes immediately: update counts, splice query lists, modify message objects
   - Keywords: `optimistic updates`, `latency`, `preemptive changes`
 
-- **Select All Operations** `jmap-spec:client.md` (lines 261-263) - Fetch complete message list, handle thread-wide actions with `collapseThreads: false`
+- **Select All Operations** `jmap-spec:client.md` - Fetch complete message list, handle thread-wide actions with `collapseThreads: false`
   - Keywords: `select all`, `bulk operations`, `threads`
 
 ### Full Mailbox Sync
 
-- **Complete Synchronization** `jmap-spec:client.md` (lines 269-310) - For apps maintaining local copies: `Mailbox/changes`, `Email/changes`, fetch added/updated with minimal properties
+- **Complete Synchronization** `jmap-spec:client.md` - For apps maintaining local copies: `Mailbox/changes`, `Email/changes`, fetch added/updated with minimal properties
   - Keywords: `full sync`, `local storage`, `offline`
 
-- **Performance Principles** `jmap-spec:client.md` (lines 314-322) - Minimize round trips, request only necessary properties, sparse caching, optimistic updates, prioritize recent messages
+- **Performance Principles** `jmap-spec:client.md` - Minimize round trips, request only necessary properties, sparse caching, optimistic updates, prioritize recent messages
   - Keywords: `performance`, `optimization`, `best practices`
 
 ---
 
 ## Server Implementation
 
-### Data Structures
+> **Note:** This section was substantially rewritten upstream (`jmap.io/server/`). The database design now separates mutable metadata from immutable content and adds a dedicated search index table; the old EmailChangeLog/ThreadChangeLog/HighLowModSeqCache tables have been replaced by a modseq-indexed scan approach.
 
-- **Email ID Assignment** `jmap-spec:server.md` (lines 7-9) - Using secure hash of RFC5322 message for ID generation
-  - Keywords: `email id`, `hashing`, `unique identifiers`
+### Modification Sequences
 
-- **Modification Sequences** `jmap-spec:server.md` (lines 11-13) - 64-bit monotonic counter (ModSeq) for efficient change tracking
+- **Modseq Fundamentals** `jmap-spec:server.md` - A modseq is a 64-bit unsigned monotonically incrementing counter, one per data type per account, incremented on every change and used to drive all the change-calculation algorithms below
   - Keywords: `modseq`, `change tracking`, `versioning`
 
-- **Emails Table** `jmap-spec:server.md` (lines 19-32) - Mutable state: id, blobId, threadId, mailboxIds, keywords, headers, metadata, createdModSeq, updatedModSeq, deleted
-  - Keywords: `database schema`, `emails table`, `storage`
+### Data Structures
 
-- **Threads Table** `jmap-spec:server.md` (lines 34-41) - Thread grouping: id, emails array (sorted with drafts after parent), ModSeq tracking
-  - Keywords: `threads`, `conversations`, `email grouping`
+- **EmailMetadata Table** `jmap-spec:server.md` - Mutable Email state kept narrow for fast list scans: id, threadId, mailboxIds, keywords, receivedAt, blobId, size, createdModSeq, updatedModSeq, deleted tombstone; indexed `byModSeq` and `byThreadId`
+  - Keywords: `database schema`, `email metadata`, `storage`
 
-- **Mailboxes Table** `jmap-spec:server.md` (lines 43-54) - Hierarchy: id, name, parentId, role, sortOrder, permissions, counts, ModSeq, IMAP compatibility
-  - Keywords: `mailboxes`, `folders`, `labels`
+- **EmailContent Table** `jmap-spec:server.md` - Immutable parsed content keyed by the same id as EmailMetadata: headers (from/to/cc/bcc/sender/replyTo), subject, preview, messageId/inReplyTo/references, bodyStructure, bodyValues
+  - Keywords: `email content`, `headers`, `body values`
 
-- **MailboxEmailList Table** `jmap-spec:server.md` (lines 56-67) - Optimized queries: composite id (mailboxId + date + uid), messageId, threadId, updatedModSeq
+- **EmailSearch Table** `jmap-spec:server.md` - Inverted index from normalised (NFKD, case-folded) text tokens to messages, with a field bitmask (FROM/TO/CC/BCC/SUBJECT/BODY/ATTACHMENT/LIST_ID/MESSAGE_ID) supporting freetext, address, list-id, and message-id filters
+  - Keywords: `search index`, `full text search`, `inverted index`, `freetext`
+
+- **MailboxEmailList Table** `jmap-spec:server.md` - Per-mailbox membership list including historical add/remove pairs, keyed by `(mailboxUid, removedModSeq, addedModSeq)`; powers the fast path for `Email/query`/`Email/queryChanges` on a mailbox filter
   - Keywords: `query optimization`, `message list`, `indexing`
 
-- **EmailChangeLog Table** `jmap-spec:server.md` (lines 69-73) - Change tracking: ModSeq as id, created/updated/destroyed email ID arrays
-  - Keywords: `change log`, `audit trail`, `history`
+- **MailboxEmailIndex Table** `jmap-spec:server.md` - Secondary index over live MailboxEmailList rows keyed by `(mailboxUid, emailId)`, enabling O(1) mailbox-plus-email lookups when a message moves or is destroyed
+  - Keywords: `secondary index`, `mailbox lookup`
 
-- **ThreadChangeLog Table** `jmap-spec:server.md` (lines 75-79) - Thread-level changes: mirrors EmailChangeLog structure
-  - Keywords: `thread changes`, `change log`
+- **Mailboxes Table** `jmap-spec:server.md` - Hierarchy and permissions: id, name, parentId, role, sortOrder, may* permission flags, counts, createdModSeq/updatedModSeq/updatedNotCountsModSeq, mailboxUid, emailHighestModSeq, emailListLowModSeq
+  - Keywords: `mailboxes`, `folders`, `labels`
 
-- **Refs to Thread Table** `jmap-spec:server.md` (lines 81-91) - RFC5322 header mapping: hash(rfc822id + subject) → threadId, subject normalization rules
+- **Refs to Thread Table** `jmap-spec:server.md` - RFC5322 header mapping: `hash(rfc822id) . hash(subject)` → threadId, with subject normalization rules (strip bracketed prefixes, leading `word:` tags, whitespace) and a `lastSeen` cleanup timestamp
   - Keywords: `threading`, `message headers`, `references`
 
-- **HighLowModSeqCache Table** `jmap-spec:server.md` (lines 93-100) - Singleton: highModSeq (global + per-type), lowModSeq (recalculable minimums)
-  - Keywords: `cache`, `modseq tracking`, `state management`
+- **Raw Messages** `jmap-spec:server.md` - Full RFC5322 messages kept in a blob store addressable by blob id, fetched by clients via standard JMAP blob endpoints
+  - Keywords: `blob storage`, `raw messages`
 
-- **Additional Storage** `jmap-spec:server.md` (lines 102-106) - Raw RFC5322 messages in blob store, email text search index
-  - Keywords: `blob storage`, `text search`, `full text index`
+### Algorithms
 
-### State Management
-
-- **State Property Values** `jmap-spec:server.md` (lines 108-116) - Return appropriate ModSeq per query type: Email/Thread/Mailbox getters, Email/query encoding
-  - Keywords: `state`, `modseq values`, `query state`
-
-### Change Calculation
-
-- **Email/changes Algorithm** `jmap-spec:server.md` (lines 120-122) - Compare against highModSeqEmail, read EmailChangeLog forward from client ModSeq
+- **Email/changes Algorithm** `jmap-spec:server.md` - Range-scan EmailMetadata `byModSeq` from the client's modseq, bucketing into created/updated/destroyed via `createdModSeq` and `deleted`
   - Keywords: `email changes`, `delta calculation`, `change detection`
 
-- **Thread/changes Algorithm** `jmap-spec:server.md` (lines 124-126) - Mirror Email/changes using ThreadChangeLog
+- **Thread/changes Algorithm** `jmap-spec:server.md` - Range-scan EmailMetadata `byModSeq`, then use `byThreadId` to determine whether each affected thread is new, updated, or fully destroyed
   - Keywords: `thread changes`, `delta calculation`
 
-- **Mailbox/changes Algorithm** `jmap-spec:server.md` (lines 128-130) - Iterate mailboxes comparing updatedModSeq, check deleted field, detect count-only changes via updatedNotCountsModSeq
+- **Mailbox/changes Algorithm** `jmap-spec:server.md` - Compare each mailbox's `updatedModSeq` to the client modseq; `deleted` marks destruction, `updatedNotCountsModSeq` distinguishes count-only changes
   - Keywords: `mailbox changes`, `folder updates`
 
-- **Email/query Algorithm** `jmap-spec:server.md` (lines 132-142) - Build filtered list from MailboxEmailList or full scan, apply thread collapsing
-  - Keywords: `email query`, `filtering`, `sorting`
+- **Email/query Algorithm** `jmap-spec:server.md` - Three strategies by cost: the **fast mailbox path** (MailboxEmailList range scan for `inMailbox` filters), the **fast search path** (single EmailSearch token cursor), and a **generic fallback** (candidate hydration or full scan)
+  - Keywords: `email query`, `filtering`, `sorting`, `query strategy`
 
-- **Email/queryChanges Algorithm** `jmap-spec:server.md` (lines 144-198) - For mailbox filters: leverage MailboxEmailList, track seen exemplars, compute added/removed positions, handle mutable sorts
-  - Keywords: `query changes`, `delta query`, `position tracking`
+- **Email/queryChanges Algorithm** `jmap-spec:server.md` - For mailbox filters, diff live plus recently-removed MailboxEmailList rows via an exemplar-tracking scan (`SeenExemplar`/`SeenOldExemplar`) to compute added/removed with positions; other filters fall back to a `byModSeq` scan expanded to full threads
+  - Keywords: `query changes`, `delta query`, `position tracking`, `exemplar`
+
+- **Email/set Algorithm** `jmap-spec:server.md` - Single choke point per mutation: write EmailMetadata/tombstone, diff `mailboxIds` (including the `$flagged` virtual mailbox) against MailboxEmailList/MailboxEmailIndex, bump thread/count modseqs, write EmailContent and EmailSearch tokens
+  - Keywords: `email set`, `mutation`, `mailbox membership`
+
+- **Email ID Assignment** `jmap-spec:server.md` - Recommends a time-reversed prefix in server-assigned email ids so ascending-id scans (e.g. EmailSearch cursors) are already approximately date-ordered
+  - Keywords: `email id`, `id assignment`, `time-reversed prefix`
 
 ### Protocol Compliance
 
-- **RFC5322 to JMAP Conversion** `jmap-spec:server.md` (lines 202-204) - Attachment filename encoding: RFC2231 in Content-Disposition, RFC2047 in Content-Type name parameter
+- **RFC5322 to JMAP Conversion** `jmap-spec:server.md` - Attachment filename encoding: RFC2231 in Content-Disposition `filename`, and (for compatibility) RFC2047 in Content-Type `name`
   - Keywords: `rfc5322`, `mime`, `encoding`, `attachments`
 
-- **Vacation Response** `jmap-spec:server.md` (lines 206-225) - RFC-5230 compliance: avoid mailing lists, automation addresses, set Auto-Submitted header, track notifications, RFC-3824 headers
+- **Vacation Response** `jmap-spec:server.md` - RFC-5230 compliance: avoid mailing lists and automation addresses, set `Auto-Submitted: auto-replied`, track sent notifications, follow RFC-3834 personal-responder conventions and RFC-2822 References generation
   - Keywords: `vacation`, `auto-reply`, `out of office`
 
 ### Upload Errors
 
-- **Upload Error Codes** `jmap-spec:server.md` (lines 229-248) - 400 Bad Request, 401 Unauthorized, 413 Too Large, 415 Unsupported Type, 429 Rate Limited
+- **Binary Upload Error Codes** `jmap-spec:server.md` - 400 Bad Request, 401 Unauthorized (with `WWW-Authenticate`), 413 Request Entity Too Large, 415 Unsupported Media Type, 429 Rate Limited (with optional `Retry-After`)
   - Keywords: `upload`, `error codes`, `http status`
 
 ---
