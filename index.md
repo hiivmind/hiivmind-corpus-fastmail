@@ -1,7 +1,7 @@
 # Fastmail & JMAP Documentation Corpus
 
 > **Sources:** Fastmail API docs, JMAP specifications, code examples
-> **Last updated:** 2026-07-01
+> **Last updated:** 2026-07-08
 > **Total:** 5 documentation files + code samples across 4 languages
 
 ---
